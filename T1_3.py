@@ -42,6 +42,8 @@ L0, R0 = split_into_blocks(plaintext_binary, block_size=64)
 print(f"3.iii - L0: {L0}")
 print(f"3.iii - R0: {R0}")
 
+
+
 #3. IV
 # Initial Permutation (IP) table as per the provided image.
 IP_table = [
@@ -78,9 +80,9 @@ expansion_P_box = [
 # Expansion function to expand the R0 block from 32 to 48 bits using the expansion P-box
 def expansion_function(block, expansion_table):
     return ''.join(block[i - 1] for i in expansion_table)
-
-# Apply the expansion function to R0
-expanded_R0 = expansion_function(R0, expansion_P_box)
+right_half = IP_output[32:]
+print(f" right 32 bit = {right_half}")
+expanded_R0 = expansion_function(right_half, expansion_P_box)
 
 # Print the expanded R0 block
 print(f"3.v = {expanded_R0}")
@@ -143,6 +145,7 @@ def xor(bin_str1, bin_str2):
     return ''.join(str(int(bit1) ^ int(bit2)) for bit1, bit2 in zip(bin_str1, bin_str2))
 
 # Perform XOR operation between expanded_R0 and K1
+#print(expanded_R0, K1)
 xor_output = xor(expanded_R0, K1)
 
 # Print the XOR output
@@ -210,7 +213,6 @@ S_boxes = [
     ]
 ]
 
-#3.x
 def sbox_substitution(input_bits):
     output = ''
     for i in range(8):
@@ -235,6 +237,7 @@ sbox_output = sbox_substitution(sbox_input)
 # Print the output of S-box substitution
 print(f"3.ix = {sbox_output}")
 
+#3.x
 # Define the straight permutation table
 straight_permutation_table = [
     16, 7, 20, 21, 29, 12, 28, 17,
@@ -248,7 +251,6 @@ def straight_permutation(input_bits, permutation_table):
     return ''.join(input_bits[i - 1] for i in permutation_table)
 
 # Output of S-box substitution from part IX (example)
-sbox_output = "11001010001100101100100011011100"
 
 # Perform straight permutation
 output_after_permutation = straight_permutation(sbox_output, straight_permutation_table)
